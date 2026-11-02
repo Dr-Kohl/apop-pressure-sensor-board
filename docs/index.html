@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>APOP Pressure Sensor Board</title><link rel="stylesheet" href="apop.css?v=0.4.1"></head>
+<body><main>
+<header><div><div class="eyebrow">APOP · LABORATORY</div><h1>APOP Pressure Sensor Board</h1><p>Three channels. One live view.</p></div><div class="connection"><span id="connection" role="status">Disconnected</span><button id="connect" class="primary">Connect board</button><button id="disconnect" disabled>Disconnect</button></div></header>
+<div class="toolbar"><span><span class="dot"></span> Live · 10 samples / second · 2 Hz filter</span><span id="clock"></span><div role="group" aria-label="Pressure units"><button id="psi" aria-pressed="true">PSI</button><button id="pa" aria-pressed="false">Pa</button></div></div>
+<p id="error" role="alert"></p><p id="message">Connect the board in Chrome or Edge to begin. Close the other sensor page's USB connection first.</p>
+<p class="zero-guidance">Before zeroing: open both A and B to room air, or connect both to the same pressure. Keep air still for five seconds. A steady real pressure difference would also be subtracted.</p>
+<section id="channels" class="channels" aria-label="Pressure channels"></section>
+<section class="panel chart-panel"><div class="section-head"><div><h2>Live pressure</h2><p>Last 60 seconds · scrolling · automatic vertical scale</p></div><span id="last-reading">Waiting for readings</span></div><canvas id="chart" role="img" aria-label="Live differential pressure graph for channels 1, 2 and 3 over the last 60 seconds"></canvas><p id="chart-note">Connect the board to see live pressure. Channel visibility affects only the graph.</p></section>
+<section class="panel recording-panel"><div><div class="eyebrow">RECORDING</div><h2 id="record-state" role="status">Ready when you are</h2><p id="record-info">Only samples between Start and Stop are included in the CSV.</p></div><div class="record-actions"><button id="start" class="primary" disabled>Start recording</button><button id="stop" disabled>Stop recording</button><button id="download" disabled>Save CSV…</button></div></section>
+<p class="footnote">Data stays in this tab until downloaded. CSV uses local computer date and time, without a time zone. Keep this tab active for regular sampling.</p>
+<details><summary>Connection details &amp; help</summary><p>ND030D differential pressure: B − A. To test with positive pressure, connect tubing to B and leave A open. Keep moisture out of the sensor. Numbers update once per second; graph and CSV sample at 10/s. Zero subtracts the five-second mean from future readings; earlier graph points keep their original correction. Zero is a baseline correction, not a sensitivity calibration. Zero and range controls are locked during recording. Changing range clears that channel's zero; disconnecting clears all zeros. CSV contains corrected pressure and the offset in its labeled units; add them to recover the measured pressure. Recording units stay fixed when display units change.</p><pre id="log">No connection yet.</pre><a href="https://github.com/Dr-Kohl/apop-pressure-sensor-board#readme" target="_blank" rel="noopener">Setup guide and source code</a></details>
+<dialog id="replace"><h2>Replace the previous recording?</h2><p>The previous recording has not been downloaded. Starting again will discard those samples.</p><div class="record-actions"><button id="cancel-replace">Keep recording</button><button id="confirm-replace" class="danger">Discard and start new</button></div></dialog>
+</main><script>
+// Keep startup failures visible even if the main module cannot load.
+const startupError=event=>{
+  const detail=event.message||event.reason?.message||String(event.reason||'A page resource could not load.');
+  document.getElementById('error').textContent='Page error: '+detail+' — Refresh this page with Ctrl+Shift+R.';
+};
+window.addEventListener('error',startupError);
+window.addEventListener('unhandledrejection',startupError);
+setTimeout(()=>{if(!document.documentElement.dataset.apopReady)startupError({message:'The pressure page did not finish loading'});},5000);
+</script><script type="module" src="apop.mjs?v=0.4.2"></script></body></html>
+

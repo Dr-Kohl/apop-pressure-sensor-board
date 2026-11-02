@@ -1,0 +1,7 @@
+build/
+build-cache/
+__pycache__/
+*.log
+*.csv
+*.jsonl
+.DS_Store
